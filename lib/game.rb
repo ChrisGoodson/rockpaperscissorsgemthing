@@ -1,10 +1,9 @@
 
-require_relative player.rb
+require_relative "player.rb"
 
 class Game
 
   WINNING_COMBINATIONS = { "rock" => "scissors", "paper" => "rock", "scissors" => "paper" }
-  OPTIONS = ["rock", "paper", "scissors"]
 
   def initialize(num_of_players)
     @num_of_players = num_of_players
@@ -32,7 +31,7 @@ class Game
   end
 
   def check_outcome(opponent_choice)
-    if @player_1.choice == opponent_choice
+    if @player1.choice == opponent_choice
       @outcome = "The game is a tie."
     elsif WINNING_COMBINATIONS[@player1.choice] == opponent_choice
       @outcome = "Player 1 is the winner."
@@ -45,16 +44,17 @@ class Game
     puts @outcome
   end
 
+  def get_player_choice(player)
+    print "Please enter your choice now: "
+    player.make_choice
+  end
+
   def validate_player_choice(player)
-    unless OPTIONS.include?(player.choice)
+    unless ["rock", "paper", "scissors"].include?(player.choice)
       puts "Please enter either \"rock\", \"paper\", or \"scissors\""
       get_player_choice(player)
     end
-
-
-
-
-
+  end
 
 
   def game_loop
@@ -62,15 +62,10 @@ class Game
     print_instructions
     until @outcome
       @player1.make_choice
-      validate_player_choice(@player1.choice)
-      if @num_of_players == 1
-        computer_move
-        check_outcome(@computer_choice)
-      else
-        @player2.make_choice)
-        validate_player_choice(@player2)
-        check_outcome(@player2.choice)
-      end
+      validate_player_choice(@player1)
+      @player2.make_choice
+      validate_player_choice(@player2)
+      check_outcome(@player2.choice)
       print_outcome
     end
   end
